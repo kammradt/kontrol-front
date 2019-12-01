@@ -1,16 +1,17 @@
 <template>
-  <div>{{currentUser}}</div>
+  <div>{{ user }}</div>
 </template>
 
 <script>
 export default {
   name: "Dashboard",
   computed: {
-    currentUser() {
-      return this.$store.state.user;
+    user() {
+      if (this.$store.getters.IS_LOADING) return `Loading`;
+      return this.$store.getters.USER;
     }
   },
-  beforeCreate() {
+  mounted() {
     setTimeout(() => {
       this.$store.dispatch("me");
     }, 0);

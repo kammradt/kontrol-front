@@ -18,8 +18,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  let hasToken = store.state.token
-
+  let hasToken = store.getters.TOKEN
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (hasToken) {
       next()

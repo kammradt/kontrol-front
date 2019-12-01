@@ -75,7 +75,7 @@ export default {
       return this.isTryingToLogin ? "primary" : "secondary";
     },
     loading() {
-      return this.$store.state.loading;
+      return this.$store.getters.IS_LOADING;
     }
   },
   methods: {
