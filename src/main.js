@@ -1,23 +1,24 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
-import vuetify from './plugins/vuetify';
 
-import axios from 'axios'
+import store from './store/index'
 
+import vuetify from './plugins/vuetify'
+import axiosInstace from './plugins/axios'
 
-Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:8080/'
-})
+import userService from './modules/login/services/userService'
 
-Vue.use(axios)
 
 Vue.config.productionTip = false
+Vue.prototype.$http = axiosInstace
 
-new Vue({
+let rootVue = new Vue({
   router,
   store,
   vuetify,
   render: h => h(App)
 }).$mount('#app')
+
+
+userService.$app = rootVue;
