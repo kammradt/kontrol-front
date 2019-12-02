@@ -8,7 +8,7 @@ import vuetify from './plugins/vuetify'
 import axiosInstace from './plugins/axios'
 
 import userService from './modules/login/services/userService'
-
+import requestService from './modules/dashboard/services/requestService'
 
 Vue.config.productionTip = false
 Vue.prototype.$http = axiosInstace
@@ -22,3 +22,4 @@ let rootVue = new Vue({
 
 
 userService.$app = rootVue;
+requestService.$app = rootVue;

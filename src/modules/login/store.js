@@ -80,7 +80,7 @@ const userMutations = {
   }
 }
 
-export default {
+export {
   userState,
   userGetters,
   userActions,
