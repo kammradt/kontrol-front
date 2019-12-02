@@ -51,6 +51,8 @@ export default {
     } catch (error) {
       if (error.response.status === 400)
         notyf.error(error.response.data.message);
+      if (error.response.status === 404)
+        notyf.error(error.response.data.message);
       throw 'NotAbleToGetCurrentUser'
     }
   }

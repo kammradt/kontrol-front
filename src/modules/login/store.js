@@ -51,6 +51,8 @@ const userActions = {
       let currentUser = await userService.me()
       commit("SET_USER", currentUser)
     } catch (err) {
+      commit('DELETE_TOKEN')
+      commit('SET_USER', null)
       throw 'ErrorDuringGetCurrentUser'
     } finally {
       commit("SET_LOADING", false)
@@ -79,8 +81,8 @@ const userMutations = {
 }
 
 export default {
-    userState,
-    userGetters,
-    userActions,
-    userMutations,
+  userState,
+  userGetters,
+  userActions,
+  userMutations,
 }
