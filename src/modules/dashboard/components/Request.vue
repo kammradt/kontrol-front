@@ -12,7 +12,7 @@
           <v-card-title :class="`${colors[stage.state]}--text`" primary-title>
             {{stage.state | formattedState}}
             <v-spacer />
-            <span class="overline support--text">{{request.creationDate | longDate}}</span>
+            <span class="overline support--text">{{stage.realizationDate | longDate}}</span>
           </v-card-title>
           <v-card-text v-text="stage.description" />
         </v-card>
@@ -22,30 +22,72 @@
               <v-btn @click.stop="open" dark block depressed color="progress" v-text="'Edit'" />
             </v-col>
             <v-col cols="8">
-              <v-btn @click.stop="addStage" block depressed color="secondary" v-text="'New stage'" />
+              <v-btn
+                @click.stop="openDialog"
+                block
+                depressed
+                color="secondary"
+                v-text="'New stage'"
+              />
             </v-col>
           </v-row>
         </v-card-actions>
       </v-card-text>
     </v-slide-y-transition>
+
+    <v-dialog v-model="dialog" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="primary--text headline pb-5">Creating new Request Stage</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row no-gutters>
+              <v-col cols="12">
+                <v-text-field
+                  outlined
+                  v-model="newRequestStageData.description"
+                  label="Description"
+                />
+              </v-col>
+              <v-col cols="12">
+                <v-switch label="Is finished?" v-model="newRequestStageData.isClosed"></v-switch>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn color="open" dark block @click="createNewRequestStage">Save</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 export default {
   name: "Request",
-  data: () => ({
-    showDetails: false,
-    colors: {
-      OPEN: "open",
-      IN_PROGRESS: "progress",
-      CLOSED: "closed"
-    },
-    newRequestStageData: {
-      isClosed: false,
-      description: ""
-    }
-  }),
+  data() {
+    return {
+      showDetails: false,
+      colors: {
+        OPEN: "open",
+        IN_PROGRESS: "progress",
+        CLOSED: "closed"
+      },
+      newRequestStageData: {
+        isClosed: false,
+        description: "",
+        requestId: this.request.id 
+      },
+      dialog: false
+    };
+  },
   computed: {
     showNewStageOption() {
       return this.request.state !== "CLOSED";
@@ -76,11 +118,24 @@ export default {
     open() {
       console.log("open");
     },
-    addStage() {
-      console.log("");
+    openDialog() {
+      this.dialog = true;
+    },
+    createNewRequestStage() {
+      this.$store
+        .dispatch("addRequestStage", this.newRequestStageData)
+        .then(() => {
+          this.closeDialog();
+        });
+    },
+    closeDialog() {
+      this.dialog = false;
+      this.newRequestStageData = {};
     },
     showRequestStages() {
       this.showDetails = !this.showDetails;
+      if (this.request.stages.length === 0) return;
+
       let last = this.request.stages.find(stage => stage.state === `CLOSED`);
       let penultimate = this.request.stages.find(
         stage => stage.state === `IN_PROGRESS`

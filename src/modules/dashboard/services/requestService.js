@@ -35,15 +35,16 @@ export default {
     try {
       let body = {
         user: { id: this.$app.$store.getters.USER.id },
-        request: { id: newRequestStageData.id },
+        request: { id: newRequestStageData.requestId },
         state: newRequestStageData.isClosed ? 'CLOSED' : 'IN_PROGRESS',
         description: newRequestStageData.description
       }
       let headers = this.$app.$store.getters.HEADER
       let response = await this.$app.$http.post('/request-stages', body, { headers })
-      console.log(response)
+      return response.data
     } catch (error) {
-      console.log(error)
+      notyf.error(error);
+      throw 'ErrorCreatingNewRequestStage'
     }
   }
 
