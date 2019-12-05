@@ -19,7 +19,14 @@
         <v-card-actions v-if="showNewStageOption">
           <v-row>
             <v-col cols="4">
-              <v-btn @click.stop="open" dark block depressed color="progress" v-text="'Edit'" />
+              <v-btn
+                @click.stop="openDialogUpdate"
+                dark
+                block
+                depressed
+                color="progress"
+                v-text="'Edit'"
+              />
             </v-col>
             <v-col cols="8">
               <v-btn
@@ -66,6 +73,37 @@
         </v-card-text>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="dialogUpdate" max-width="600px">
+      <v-card>
+        <v-card-title>
+          <span class="primary--text headline pb-5">Updating a Request</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row no-gutters>
+              <v-col cols="12">
+                <v-text-field v-model="newRequestData.subject" outlined label="Subject" />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="newRequestData.description" outlined label="Description" />
+              </v-col>
+              <v-col cols="12">
+                <v-switch label="Is finished?" v-model="newRequestData.isClosed"></v-switch>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn color="open" dark block @click="updateRequest">Save</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </v-card>
 </template>
 
@@ -83,9 +121,15 @@ export default {
       newRequestStageData: {
         isClosed: false,
         description: "",
-        requestId: this.request.id 
+        requestId: this.request.id
       },
-      dialog: false
+      newRequestData: {
+        subject: this.request.subject,
+        description: this.request.description,
+        isClosed: false
+      },
+      dialog: false,
+      dialogUpdate: false
     };
   },
   computed: {
@@ -115,8 +159,8 @@ export default {
     }
   },
   methods: {
-    open() {
-      console.log("open");
+    openDialogUpdate() {
+      this.dialogUpdate = true;
     },
     openDialog() {
       this.dialog = true;
@@ -128,9 +172,21 @@ export default {
           this.closeDialog();
         });
     },
+    updateRequest() {
+      this.$store
+        .dispatch("updateRequest", {
+          requestId: this.request.id,
+          ...this.newRequestData
+        })
+        .then(() => {
+          this.closeDialog();
+        });
+    },
     closeDialog() {
       this.dialog = false;
+      this.dialogUpdate = false;
       this.newRequestStageData = {};
+      this.newRequestData = {};
     },
     showRequestStages() {
       this.showDetails = !this.showDetails;

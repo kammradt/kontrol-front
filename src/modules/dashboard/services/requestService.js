@@ -31,13 +31,13 @@ export default {
     }
   },
 
-  async addRequestStage(newRequestStageData) {
+  async addRequestStage({ requestId, isClosed, description }) {
     try {
       let body = {
         user: { id: this.$app.$store.getters.USER.id },
-        request: { id: newRequestStageData.requestId },
-        state: newRequestStageData.isClosed ? 'CLOSED' : 'IN_PROGRESS',
-        description: newRequestStageData.description
+        request: { id: requestId },
+        state: isClosed ? 'CLOSED' : 'IN_PROGRESS',
+        description: description
       }
       let headers = this.$app.$store.getters.HEADER
       let response = await this.$app.$http.post('/request-stages', body, { headers })
@@ -45,6 +45,29 @@ export default {
     } catch (error) {
       notyf.error(error);
       throw 'ErrorCreatingNewRequestStage'
+    }
+  },
+
+  async updateRequest({ requestId, subject, description, isClosed }) {
+    try {
+      let body = {
+        user: { id: this.$app.$store.getters.USER.id },
+        subject,
+        description,
+        state: isClosed ? 'CLOSED' : 'IN_PROGRESS',
+      }
+      let headers = this.$app.$store.getters.HEADER
+      let response = await this.$app.$http.put(`/requests/${requestId}`, body, { headers })
+      return response.data
+    } catch (error) {
+      if (error.response.status === 400) {
+        error.response.data.errors.forEach(e => {
+          notyf.error(e);
+        })
+      } else {
+        notyf.error(error.response.data.message);
+      }
+      throw 'ErrorUpdatingRequest'
     }
   }
 

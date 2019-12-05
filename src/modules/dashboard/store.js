@@ -36,7 +36,6 @@ const requestActions = {
     commit("SET_LOADING", true)
     try {
       let newRequestStage = await requestService.addRequestStage(newRequestStageData)
-      console.log()
       commit("ADD_NEW_REQUEST_STAGE", {
         newRequestStage,
         requestId: newRequestStageData.requestId
@@ -44,6 +43,18 @@ const requestActions = {
     } finally {
       commit("SET_LOADING", false)
     }
+  },
+
+  async updateRequest({ commit }, newRequestData) {
+    commit("SET_LOADING", true)
+    try {
+      let updatedRequest = await requestService.updateRequest(newRequestData)
+      commit("REPLACE_UPDATED_REQUEST", { updatedRequest, requestId: newRequestData.requestId })
+    } finally {
+      commit("SET_LOADING", false)
+    }
+
+
   }
 }
 
@@ -58,6 +69,9 @@ const requestMutations = {
     // Create a GETTER to do the below
     let request = state.requests.find(request => request.id == payload.requestId)
     request.stages.push(payload.newRequestStage)
+  },
+  REPLACE_UPDATED_REQUEST(state, { updatedRequest, requestId }) {
+    state.requests[state.requests.findIndex(request => request.id === requestId)] = updatedRequest;
   }
 }
 

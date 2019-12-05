@@ -119,11 +119,9 @@ export default {
       this.newRequestData = {};
     },
     createNewRequest() {
-      this.$store
-        .dispatch("createRequest", this.newRequestData)
-        .then(() => {
-          this.closeDialog();
-        })
+      this.$store.dispatch("createRequest", this.newRequestData).then(() => {
+        this.closeDialog();
+      });
     }
   },
   mounted() {
