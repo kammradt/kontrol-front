@@ -57,7 +57,19 @@ const userActions = {
     } finally {
       commit("SET_LOADING", false)
     }
-  }
+  },
+
+  async updateUser({commit}, newUserData) {
+    commit("SET_LOADING", true)
+    try {
+      let updatedUser = await userService.updateUser(newUserData)
+      commit("SET_USER", updatedUser)
+    } catch (error) {
+      throw 'ErrorDuringUpdatingCurrentUser'
+    } finally {
+      commit("SET_LOADING", false)
+    }
+  } 
 }
 
 const userMutations = {

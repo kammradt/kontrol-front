@@ -73,6 +73,61 @@
       </v-row>
     </v-container>
 
+    <v-dialog v-model="dialogProfile" max-width="600px" v-if="user">
+      <v-card>
+        <v-card-title>
+          <span class="primary--text headline pb-5">Your profile</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row no-gutters>
+              <v-col cols="12">
+                <v-text-field v-model="newUserData.name" :placeholder="user.name" outlined label="Name" />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="newUserData.email" :placeholder="user.email" outlined label="Email" />
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="user.role" readonly outlined label="Premium Status" />
+              </v-col>
+              <v-row v-if="true">
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newUserData.newPassword"
+                    outlined
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="showPassword ? 'text' : 'password'"
+                    label="New Password"
+                    hint="At least 8 characters"
+                    @click:append="showPassword = !showPassword"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newUserData.newPasswordAgain"
+                    outlined
+                    :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    :type="showPassword2 ? 'text' : 'password'"
+                    label="New Password again"
+                    hint="At least 8 characters"
+                    @click:append="showPassword2 = !showPassword2"
+                  />
+                </v-col>
+              </v-row>
+            </v-row>
+            <v-row>
+              <v-col cols="6">
+                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-btn color="open" dark block @click="saveUser">Save</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
     <v-card>{{ user }}</v-card>
   </div>
 </template>
@@ -83,14 +138,25 @@ import Request from "./../components/Request";
 export default {
   name: "Dashboard",
   components: { Request },
-  data: () => ({
-    filterText: "",
-    dialog: false,
-    newRequestData: {
-      subject: "",
-      description: ""
-    }
-  }),
+  data() {
+    return {
+      filterText: "",
+      dialog: false,
+      dialogProfile: false,
+      newRequestData: {
+        subject: "",
+        description: ""
+      },
+      newUserData: {
+        name: '',
+        email: '',
+        newPassword: "",
+        newPasswordAgain: ""
+      },
+      showPassword: false,
+      showPassword2: false
+    };
+  },
   computed: {
     user() {
       if (this.$store.getters.IS_LOADING) return "Loading user...";
@@ -109,19 +175,27 @@ export default {
   },
   methods: {
     openProfile() {
-      console.log(`opening user profile`);
+      this.dialogProfile = true;
     },
     logout() {
       console.log(`logout`);
     },
     closeDialog() {
       this.dialog = false;
+      this.dialogProfile = false;
       this.newRequestData = {};
     },
     createNewRequest() {
       this.$store.dispatch("createRequest", this.newRequestData).then(() => {
         this.closeDialog();
       });
+    },
+    saveUser() {
+      this.$store.dispatch("updateUser", {
+        ...this.newUserData 
+      }).then(() => {
+        this.closeDialog();
+      })
     }
   },
   mounted() {
@@ -133,7 +207,3 @@ export default {
   }
 };
 </script>
-
-
-<style scoped>
-</style>

@@ -10,7 +10,7 @@ export default {
       if (response.status === 200)
         return response.data.elements
     } catch (error) {
-      notyf.error(error)
+      notyf.error(error.response.data.message)
       throw 'NotAbleToGetCurrentUserRequests'
     }
   },
