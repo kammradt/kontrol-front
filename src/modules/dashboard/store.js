@@ -20,12 +20,25 @@ const requestActions = {
     } finally {
       commit("SET_LOADING", false)
     }
+  },
+
+  async createRequest({commit}, newRequestData) {
+    commit("SET_LOADING", true)
+    try {
+      let newRequest = await requestService.createRequest(newRequestData)
+      commit("ADD_NEW_REQUEST", newRequest)
+    } finally {
+      commit("SET_LOADING", false)
+    }
   }
 }
 
 const requestMutations = {
   SET_REQUESTS(state, payload) {
     state.requests = payload
+  },
+  ADD_NEW_REQUEST(state, payload) {
+    state.requests.push(payload)
   }
 }
 

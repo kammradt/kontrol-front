@@ -10,6 +10,10 @@ export default new Vuetify({
       light: {
         primary: '#01579B',
         secondary: '#039BE5',
+        support: '#93B5C6',
+        open: '#C3E88D',
+        progress: '#ffcb6b',
+        closed: '#d5756c'
       },
     },
   },

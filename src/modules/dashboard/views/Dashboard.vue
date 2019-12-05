@@ -1,20 +1,141 @@
 <template>
-  <div>{{ user }}</div>
+  <div>
+    <v-container fluid>
+      <v-row>
+        <v-col cols="12">
+          <v-card>
+            <v-card-title>
+              <v-btn text right icon color="primary">
+                <v-icon large primary left pr-3 v-text="'mdi-magnify'" />
+              </v-btn>
+              <v-text-field
+                label="Search your request here"
+                class="title pr-3"
+                v-model="filterText"
+              />
+
+              <v-speed-dial direction="bottom" style="z-index: 4">
+                <template v-slot:activator>
+                  <v-btn text right icon large color="primary">
+                    <v-icon v-text="'mdi-dots-vertical'" />
+                  </v-btn>
+                </template>
+                <v-btn fab dark color="primary" @click="openProfile">
+                  <v-icon>mdi-account</v-icon>
+                </v-btn>
+                <v-btn fab dark color="closed" @click="logout">
+                  <v-icon>mdi-logout</v-icon>
+                </v-btn>
+              </v-speed-dial>
+            </v-card-title>
+          </v-card>
+        </v-col>
+        <v-col cols="12" v-for="request in filteredRequests" :key="request.id">
+          <Request :request="request" />
+        </v-col>
+
+        <v-dialog v-model="dialog" max-width="600px">
+          <template v-slot:activator="{ on }">
+            <v-btn color="primary" fab dark large fixed right bottom v-on="on">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <v-card>
+            <v-card-title>
+              <span class="primary--text headline pb-5">Creating new Request</span>
+            </v-card-title>
+            <v-card-text>
+              <v-container>
+                <v-row no-gutters>
+                  <v-col cols="12">
+                    <v-text-field v-model="newRequestData.subject" outlined label="Subject" />
+                  </v-col>
+                  <v-col cols="12">
+                    <v-text-field
+                      v-model="newRequestData.description"
+                      outlined
+                      label="Description"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+                  </v-col>
+                  <v-col cols="6">
+                    <v-btn color="open" dark block @click="createNewRequest">Save</v-btn>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </v-container>
+
+    <v-card>{{ user }}</v-card>
+  </div>
 </template>
 
 <script>
+import Request from "./../components/Request";
+
 export default {
   name: "Dashboard",
+  components: { Request },
+  data: () => ({
+    filterText: "",
+    dialog: false,
+    newRequestData: {
+      subject: "",
+      description: ""
+    }
+  }),
   computed: {
     user() {
-      if (this.$store.getters.IS_LOADING) return `Loading`;
+      if (this.$store.getters.IS_LOADING) return "Loading user...";
       return this.$store.getters.USER;
+    },
+    requests() {
+      if (this.$store.getters.IS_LOADING) return;
+      return this.$store.getters.REQUESTS;
+    },
+    filteredRequests() {
+      if (!this.requests) return;
+      return this.requests.filter(request =>
+        request.subject.toLowerCase().includes(this.filterText)
+      );
+    }
+  },
+  methods: {
+    openProfile() {
+      console.log(`opening user profile`);
+    },
+    logout() {
+      console.log(`logout`);
+    },
+    closeDialog() {
+      this.dialog = false;
+      this.newRequestData = {};
+    },
+    createNewRequest() {
+      this.$store
+        .dispatch("createRequest", this.newRequestData)
+        .then(() => {
+          this.closeDialog();
+        })
     }
   },
   mounted() {
     setTimeout(() => {
-      this.$store.dispatch("me");
+      this.$store.dispatch("me").then(() => {
+        this.$store.dispatch("getRequests");
+      });
     }, 0);
   }
 };
 </script>
+
+
+<style scoped>
+</style>
