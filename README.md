@@ -1,24 +1,23 @@
-# front-learning
+<h1 align="center">Welcome to Learning Spring 👋</h1>
+<p>
+  <a href="https://twitter.com/kammradt" target="_blank">
+    <img alt="Twitter: kammradt" src="https://img.shields.io/twitter/follow/kammradt.svg?style=social" />
+  </a>
+</p>
 
-## Project setup
-```
-npm install
-```
+> This is the front end for my [Kontrol api](https://github.com/kammradt/learning-spring)
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+## Author
 
-### Compiles and minifies for production
-```
-npm run build
-```
+👤 **Vinicius Kammradt**
 
-### Lints and fixes files
-```
-npm run lint
-```
+* Twitter: [@kammradt](https://twitter.com/kammzinho)
+* Github: [@kammradt](https://github.com/kammradt)
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Show your support
+
+Give a ⭐️ if this project helped you!
+
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_
