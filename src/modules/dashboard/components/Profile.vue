@@ -14,7 +14,7 @@
       </v-btn>
     </v-speed-dial>
 
-    <v-dialog v-model="dialogProfile" max-width="600px" v-if="user">
+    <v-dialog v-model="dialogProfile" max-width="600px" v-if="user" persistent>
       <v-card>
         <v-card-title>
           <span class="primary--text headline pb-5">Your profile</span>
