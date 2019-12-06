@@ -147,7 +147,7 @@ export default {
     },
     longDate: date => {
       let d = new Date(date);
-      return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()} falta formattar`;
+      return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     },
     formattedState(state) {
       let formatted = {
