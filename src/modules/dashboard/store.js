@@ -66,7 +66,6 @@ const requestMutations = {
     state.requests.push(payload)
   },
   ADD_NEW_REQUEST_STAGE(state, payload) {
-    // Create a GETTER to do the below
     let request = state.requests.find(request => request.id == payload.requestId)
     request.stages.push(payload.newRequestStage)
   },

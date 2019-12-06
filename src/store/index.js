@@ -19,13 +19,11 @@ import {
 Vue.use(Vuex)
 
 const state = {
-  defaultHeader: { Authorization: `Bearer ${userState.token}` },
   ...userState,
   ...requestState,
 }
 
 const getters = {
-  HEADER: (state) => state.defaultHeader,
   ...userGetters,
   ...requestGetters,
 }

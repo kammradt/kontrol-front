@@ -5,7 +5,7 @@ export default {
   async getRequests() {
     try {
       let params = { page: 0, size: 10 }
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.get(`/users/${this.$app.$store.getters.USER.id}/requests`, { params, headers })
       if (response.status === 200)
         return response.data.elements
@@ -18,7 +18,7 @@ export default {
   async createRequest(newRequestData) {
     try {
       let body = { ...newRequestData, user: { id: this.$app.$store.getters.USER.id } }
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.post('/requests', body, { headers })
       if (response.status === 201)
         return response.data
@@ -39,7 +39,7 @@ export default {
         state: isClosed ? 'CLOSED' : 'IN_PROGRESS',
         description: description
       }
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.post('/request-stages', body, { headers })
       return response.data
     } catch (error) {
@@ -56,7 +56,7 @@ export default {
         description,
         state: isClosed ? 'CLOSED' : 'IN_PROGRESS',
       }
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.put(`/requests/${requestId}`, body, { headers })
       return response.data
     } catch (error) {

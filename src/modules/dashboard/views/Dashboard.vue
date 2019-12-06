@@ -127,8 +127,6 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
-    <v-card>{{ user }}</v-card>
   </div>
 </template>
 
@@ -178,7 +176,9 @@ export default {
       this.dialogProfile = true;
     },
     logout() {
-      console.log(`logout`);
+      this.$store.dispatch("logout").then(() => {
+        this.$router.push({ name: 'LoginIndex' });
+      }) 
     },
     closeDialog() {
       this.dialog = false;

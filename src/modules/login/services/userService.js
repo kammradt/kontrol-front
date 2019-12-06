@@ -45,11 +45,12 @@ export default {
 
   async me() {
     try {
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.get("users/me", { headers })
       if (response.status === 200)
         return response.data
     } catch (error) {
+      console.log(error)
       if (error.response.status === 400)
         notyf.error(error.response.data.message);
       if (error.response.status === 404)
@@ -65,7 +66,7 @@ export default {
     }
     try {
       let body = { name, email, password: newPassword }
-      let headers = this.$app.$store.getters.HEADER
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$app.$http.put(`users/${this.$app.$store.getters.USER.id}`, body, { headers })
       if (response.status === 200) {
         notyf.success("Profile updated!")

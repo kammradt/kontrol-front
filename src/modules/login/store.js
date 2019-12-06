@@ -2,7 +2,6 @@
 
 import userService from './services/userService'
 
-
 const jwt = window.localStorage.getItem('token');
 const userState = {
   user: null,
@@ -45,6 +44,11 @@ const userActions = {
     }
   },
 
+  async logout({ commit }) {
+    commit('DELETE_TOKEN')
+    commit('SET_USER', null)
+  },
+
   async me({ commit }) {
     commit("SET_LOADING", true)
     try {
@@ -59,7 +63,7 @@ const userActions = {
     }
   },
 
-  async updateUser({commit}, newUserData) {
+  async updateUser({ commit }, newUserData) {
     commit("SET_LOADING", true)
     try {
       let updatedUser = await userService.updateUser(newUserData)
@@ -69,13 +73,13 @@ const userActions = {
     } finally {
       commit("SET_LOADING", false)
     }
-  } 
+  }
 }
 
 const userMutations = {
   SET_TOKEN(state, payload) {
+    localStorage.setItem('token', payload)
     state.token = payload
-    localStorage.setItem('token', state.token)
   },
 
   DELETE_TOKEN(state) {
