@@ -13,7 +13,6 @@
                 class="title pr-3"
                 v-model="filterText"
               />
-
               <v-speed-dial direction="bottom" style="z-index: 4">
                 <template v-slot:activator>
                   <v-btn text right icon large color="primary">
@@ -27,6 +26,7 @@
                   <v-icon>mdi-logout</v-icon>
                 </v-btn>
               </v-speed-dial>
+              
             </v-card-title>
           </v-card>
         </v-col>
