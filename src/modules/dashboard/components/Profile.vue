@@ -41,7 +41,7 @@
               <v-col cols="12">
                 <v-text-field v-model="user.role" readonly outlined label="Premium Status" />
               </v-col>
-              <v-row v-if="true">
+              <v-row no-gutters>
                 <v-col cols="12">
                   <v-text-field
                     v-model="newUserData.newPassword"
