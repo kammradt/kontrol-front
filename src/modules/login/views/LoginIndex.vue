@@ -14,7 +14,7 @@
               <span v-text="'Register'" />
             </v-tooltip>
           </v-toolbar>
-          <v-toolbar :color="color" extended extension-height="75" dark text>
+          <v-toolbar :color="color" extended extension-height="75" dark flat>
             <v-spacer />
             <v-toolbar-title class="display-2 font-weight-light test" v-text="'Kontrol'" />
             <v-icon right x-large v-text="'mdi-yin-yang'" />
