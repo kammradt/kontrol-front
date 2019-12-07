@@ -1,11 +1,15 @@
-<h1 align="center">Welcome to Learning Spring 👋</h1>
+<h1 align="center">Welcome to Kontrol 👋</h1>
 <p>
   <a href="https://twitter.com/kammradt" target="_blank">
     <img alt="Twitter: kammradt" src="https://img.shields.io/twitter/follow/kammradt.svg?style=social" />
   </a>
 </p>
 
-> This is the front end for my [Kontrol api](https://github.com/kammradt/learning-spring)
+> This is the front end for my [Kontrol api](https://github.com/kammradt/kontrol-api)
+
+
+You can access using this [link](http://kontrol-everything.herokuapp.com/)  
+(Please note that the design was made for mobile first, a better desktrop version will be made)
 
 ## Author
 
