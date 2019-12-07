@@ -63,13 +63,24 @@ const userActions = {
     }
   },
 
-  async updateUser({ commit }, newUserData) {
+  async updateUserProfile({ commit }, newUserData) {
     commit("SET_LOADING", true)
     try {
-      let updatedUser = await userService.updateUser(newUserData)
+      let updatedUser = await userService.updateProfile(newUserData)
       commit("SET_USER", updatedUser)
     } catch (error) {
       throw 'ErrorDuringUpdatingCurrentUser'
+    } finally {
+      commit("SET_LOADING", false)
+    }
+  },
+
+  async updateUserPassword({commit}, newUserPasswordData) {
+    commit("SET_LOADING", true)
+    try {
+      await userService.updateUserPassword(newUserPasswordData)
+    } catch (error) {
+      throw 'ErrorDuringUpdatingCurrentUserPassword'
     } finally {
       commit("SET_LOADING", false)
     }

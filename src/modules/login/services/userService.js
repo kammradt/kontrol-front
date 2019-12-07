@@ -58,15 +58,13 @@ export default {
     }
   },
 
-  async updateUser({ newPassword, newPasswordAgain, name, email }) {
-    if (newPassword !== newPasswordAgain) {
-      notyf.error("Passwords dont match!");
-      throw "PasswordsAreNotEqual"
-    }
+  async updateProfile({ name, email }) {
+    let body = { name, email }
+    let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    let url = `users/${this.$app.$store.getters.USER.id}/profile`
+
     try {
-      let body = { name, email, password: newPassword }
-      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      let response = await this.$app.$http.put(`users/${this.$app.$store.getters.USER.id}`, body, { headers })
+      let response = await this.$app.$http.patch(url, body, { headers })
       if (response.status === 200) {
         notyf.success("Profile updated!")
         return response.data
@@ -76,10 +74,33 @@ export default {
         error.response.data.errors.forEach(e => {
           notyf.error(e);
         })
-        throw 'InvalidFieldsException'
       } else {
         notyf.error(error.response.data.message)
       }
+      throw 'InvalidFieldsException'
+    }
+  },
+
+  async updateUserPassword({ password, confirmationPassword }) {
+    let body = { password, confirmationPassword }
+    let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    let url= `users/${this.$app.$store.getters.USER.id}/password`
+
+    try {
+      let response = await this.$app.$http.patch(url, body, {headers})
+      if (response.status === 200) {
+        notyf.success('Password updated!')
+        return response;
+      }
+    } catch (error) {
+      if (error.response.data.errors) {
+        error.response.data.errors.forEach(e => {
+          notyf.error(e);
+        })
+        throw 'InvalidFieldsDuringPasswordUpdate'
+      }
+      notyf.error(error.response.data.message)
+      throw 'PasswordsDoNotMatch'
     }
   }
 }

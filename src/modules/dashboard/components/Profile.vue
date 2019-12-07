@@ -16,10 +16,13 @@
 
     <v-dialog v-model="dialogProfile" max-width="600px" v-if="user" persistent>
       <v-card>
-        <v-card-title>
+        <v-card-title v-if="!changingPassword">
           <span class="primary--text headline pb-5">Your profile</span>
         </v-card-title>
-        <v-card-text>
+        <v-card-title v-else>
+          <span class="primary--text headline pb-5">Update password</span>
+        </v-card-title>
+        <v-card-text v-if="!changingPassword">
           <v-container>
             <v-row no-gutters>
               <v-col cols="12">
@@ -41,40 +44,80 @@
               <v-col cols="12">
                 <v-text-field v-model="user.role" readonly outlined label="Premium Status" />
               </v-col>
-              <v-row no-gutters>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newUserData.newPassword"
-                    outlined
-                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="showPassword ? 'text' : 'password'"
-                    label="New Password"
-                    hint="At least 8 characters"
-                    @click:append="showPassword = !showPassword"
-                  />
-                </v-col>
-                <v-col cols="12">
-                  <v-text-field
-                    v-model="newUserData.newPasswordAgain"
-                    outlined
-                    :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
-                    :type="showPassword2 ? 'text' : 'password'"
-                    label="New Password again"
-                    hint="At least 8 characters"
-                    @click:append="showPassword2 = !showPassword2"
-                  />
-                </v-col>
-              </v-row>
             </v-row>
-            <v-row>
-              <v-col cols="6">
-                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+          </v-container>
+        </v-card-text>
+        <v-card-text v-else>
+          <v-container>
+            <v-row no-gutters>
+              <v-col cols="12">
+                <v-text-field
+                  outlined
+                  label="New password"
+                  v-model="newUserPasswordData.password"
+                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword = !showPassword"
+                  :type="showPassword ? 'text' : 'password'"
+                  hint="At least 8 characters"
+                />
               </v-col>
-              <v-col cols="6">
-                <v-btn color="open" dark block @click="saveUser">Save</v-btn>
+              <v-col cols="12">
+                <v-text-field
+                  outlined
+                  label="Confirm your new password"
+                  v-model="newUserPasswordData.confirmationPassword"
+                  :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+                  @click:append="showPassword2 = !showPassword2"
+                  :type="showPassword2 ? 'text' : 'password'"
+                />
               </v-col>
             </v-row>
           </v-container>
+        </v-card-text>
+        <v-card-text>
+          <v-row>
+            <v-col cols="6">
+              <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+            </v-col>
+            <v-col cols="6">
+              <v-btn
+                color="primary"
+                v-if="!changingPassword"
+                dark
+                block
+                @click="updateUserProfile"
+                v-text="'Save profile'"
+              />
+              <v-btn
+                color="secondary"
+                v-else
+                dark
+                block
+                @click="updateUserPassword"
+                v-text="'Update Password'"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-btn
+                color="support"
+                v-if="!changingPassword"
+                small
+                dark
+                block
+                @click="changingPassword = true"
+                v-text="'I want to change password'"
+              />
+              <v-btn
+                color="support"
+                v-else
+                small
+                dark
+                block
+                @click="changingPassword = false"
+                v-text="'I want to change my profile'"
+              />
+            </v-col>
+          </v-row>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -82,6 +125,8 @@
 </template>
 
 <script>
+import notyf from "./../../../plugins/notyf";
+
 export default {
   name: "Profile",
   data() {
@@ -89,10 +134,13 @@ export default {
       dialogProfile: false,
       newUserData: {
         name: "",
-        email: "",
-        newPassword: "",
-        newPasswordAgain: ""
+        email: ""
       },
+      newUserPasswordData: {
+        password: "",
+        confirmationPassword: ""
+      },
+      changingPassword: false,
       showPassword: false,
       showPassword2: false
     };
@@ -114,13 +162,28 @@ export default {
     },
     closeDialog() {
       this.dialogProfile = false;
+      this.changingPassword = false;
       this.newUserData = {};
     },
-    saveUser() {
-      this.$store.dispatch("updateUser", {
+    afterChangingUserInformation() {
+      this.closeDialog();
+      notyf.success("Please, login with your new information!");
+      this.logout();
+    },
+    updateUserProfile() {
+      this.$store
+        .dispatch("updateUserProfile", {
           ...this.newUserData
-        }).then(() => {
-          this.closeDialog();
+        })
+        .then(() => {
+          this.afterChangingUserInformation();
+        });
+    },
+    updateUserPassword() {
+      this.$store
+        .dispatch("updateUserPassword", { ...this.newUserPasswordData })
+        .then(() => {
+          this.afterChangingUserInformation();
         });
     }
   }
