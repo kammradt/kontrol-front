@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="showRequestStages" :ripple="false" shaped>
+  <v-card @click="showRequestStages" :ripple="false" shaped :style="borderStyle">
     <v-card-title>
       <span primary-title class="primary--text" v-text="request.subject" />
       <v-spacer />
@@ -135,6 +135,14 @@ export default {
   computed: {
     showNewStageOption() {
       return this.request.state !== "CLOSED";
+    },
+    borderStyle() {
+      let colorByState = {
+        OPEN: "#C3E88D",
+        IN_PROGRESS: "#FFCB6B",
+        CLOSED: "#D5756C"
+      };
+      return `border-left: 4px solid ${colorByState[this.request.state]}`;
     }
   },
   props: {
@@ -204,7 +212,7 @@ export default {
             last ? last.id : penultimate ? penultimate.id : first.id
           )
           .scrollIntoView({ block: "start", behavior: "smooth" });
-      }, 100);
+      }, 10);
     }
   }
 };

@@ -12,8 +12,8 @@ export default new Vuetify({
         secondary: '#039BE5',
         support: '#93B5C6',
         open: '#C3E88D',
-        progress: '#ffcb6b',
-        closed: '#d5756c'
+        progress: '#FFCB6B',
+        closed: '#D5756C'
       },
     },
   },
