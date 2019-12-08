@@ -68,12 +68,10 @@ export default {
   },
   filters: {
     shortDate: date => {
-      if (!date) return;
       let d = new Date(date);
       return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
     },
     longDate: date => {
-      if (!date) return;
       let d = new Date(date);
       return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     },

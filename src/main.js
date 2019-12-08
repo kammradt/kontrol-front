@@ -13,13 +13,17 @@ import requestService from './modules/dashboard/services/requestService'
 Vue.config.productionTip = false
 Vue.prototype.$http = axiosInstace
 
-let rootVue = new Vue({
+userService.$http = axiosInstace;
+requestService.$http = axiosInstace;
+
+new Vue({
   router,
   store,
   vuetify,
+  beforeCreate() {
+    requestService.$app = this;
+  },
   render: h => h(App)
 }).$mount('#app')
 
 
-userService.$app = rootVue;
-requestService.$app = rootVue;
