@@ -50,7 +50,6 @@ export default {
       if (response.status === 200)
         return response.data
     } catch (error) {
-      console.log(error)
       if (error.response.status === 400)
         notyf.error(error.response.data.message);
       if (error.response.status === 404)
