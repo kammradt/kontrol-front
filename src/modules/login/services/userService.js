@@ -3,7 +3,7 @@ import notyf from './../../../plugins/notyf'
 export default {
   async login(loginData) {
     try {
-      let response = await this.$app.$http.post("users/login", loginData)
+      let response = await this.$http.post("users/login", loginData)
       if (response.status === 200) {
         notyf.success("Logging...");
         return response.data.token
@@ -24,7 +24,7 @@ export default {
 
   async register(newUserData) {
     try {
-      let response = await this.$app.$http.post("users", newUserData)
+      let response = await this.$http.post("users", newUserData)
       if (response.status === 201) {
         notyf.success("Account created");
         return response.data
@@ -44,9 +44,9 @@ export default {
   },
 
   async me() {
+    let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
     try {
-      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      let response = await this.$app.$http.get("users/me", { headers })
+      let response = await this.$http.get("users/me", { headers })
       if (response.status === 200)
         return response.data
     } catch (error) {
@@ -61,10 +61,10 @@ export default {
   async updateProfile({ name, email }) {
     let body = { name, email }
     let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    let url = `users/${this.$app.$store.getters.USER.id}/profile`
+    let url = `users/${this.$store.getters.USER.id}/profile`
 
     try {
-      let response = await this.$app.$http.patch(url, body, { headers })
+      let response = await this.$http.patch(url, body, { headers })
       if (response.status === 200) {
         notyf.success("Profile updated!")
         return response.data
@@ -84,10 +84,10 @@ export default {
   async updateUserPassword({ password, confirmationPassword }) {
     let body = { password, confirmationPassword }
     let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
-    let url= `users/${this.$app.$store.getters.USER.id}/password`
+    let url= `users/${this.$store.getters.USER.id}/password`
 
     try {
-      let response = await this.$app.$http.patch(url, body, {headers})
+      let response = await this.$http.patch(url, body, {headers})
       if (response.status === 200) {
         notyf.success('Password updated!')
         return response;
