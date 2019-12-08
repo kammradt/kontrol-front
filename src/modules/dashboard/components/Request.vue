@@ -19,97 +19,27 @@
         <v-card-actions v-if="showNewStageOption">
           <v-row>
             <v-col cols="4">
-              <v-btn
-                @click.stop="openDialogUpdate"
-                dark
-                block
-                depressed
-                color="progress"
-                v-text="'Edit'"
-              />
+              <EditRequestStage :request="request" />
             </v-col>
             <v-col cols="8">
-              <v-btn
-                @click.stop="openDialog"
-                block
-                depressed
-                color="secondary"
-                v-text="'New stage'"
-              />
+              <NewRequestStage :requestId="request.id" />
             </v-col>
           </v-row>
         </v-card-actions>
       </v-card-text>
     </v-slide-y-transition>
-
-    <v-dialog v-model="dialog" max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="primary--text headline pb-5">Creating new Request Stage</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  v-model="newRequestStageData.description"
-                  label="Description"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-switch label="Is finished?" v-model="newRequestStageData.isClosed"></v-switch>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="6">
-                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
-              </v-col>
-              <v-col cols="6">
-                <v-btn color="open" dark block @click="createNewRequestStage">Save</v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="dialogUpdate" max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="primary--text headline pb-5">Updating a Request</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.subject" outlined label="Subject" />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.description" outlined label="Description" />
-              </v-col>
-              <v-col cols="12">
-                <v-switch label="Is finished?" v-model="newRequestData.isClosed"></v-switch>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="6">
-                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
-              </v-col>
-              <v-col cols="6">
-                <v-btn color="open" dark block @click="updateRequest">Save</v-btn>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-card>
 </template>
 
 <script>
+import NewRequestStage from "./NewRequestStage";
+import EditRequestStage from "./EditRequestStage";
+
 export default {
   name: "Request",
+  components: {
+    NewRequestStage, EditRequestStage
+  },
   data() {
     return {
       showDetails: false,
@@ -117,19 +47,7 @@ export default {
         OPEN: "open",
         IN_PROGRESS: "progress",
         CLOSED: "closed"
-      },
-      newRequestStageData: {
-        isClosed: false,
-        description: "",
-        requestId: this.request.id
-      },
-      newRequestData: {
-        subject: this.request.subject,
-        description: this.request.description,
-        isClosed: false
-      },
-      dialog: false,
-      dialogUpdate: false
+      }
     };
   },
   computed: {
@@ -150,10 +68,12 @@ export default {
   },
   filters: {
     shortDate: date => {
+      if (!date) return;
       let d = new Date(date);
       return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
     },
     longDate: date => {
+      if (!date) return;
       let d = new Date(date);
       return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     },
@@ -167,35 +87,6 @@ export default {
     }
   },
   methods: {
-    openDialogUpdate() {
-      this.dialogUpdate = true;
-    },
-    openDialog() {
-      this.dialog = true;
-    },
-    createNewRequestStage() {
-      this.$store
-        .dispatch("addRequestStage", this.newRequestStageData)
-        .then(() => {
-          this.closeDialog();
-        });
-    },
-    updateRequest() {
-      this.$store
-        .dispatch("updateRequest", {
-          requestId: this.request.id,
-          ...this.newRequestData
-        })
-        .then(() => {
-          this.closeDialog();
-        });
-    },
-    closeDialog() {
-      this.dialog = false;
-      this.dialogUpdate = false;
-      this.newRequestStageData = {};
-      this.newRequestData = {};
-    },
     showRequestStages() {
       this.showDetails = !this.showDetails;
       if (this.request.stages.length === 0) return;
@@ -208,9 +99,7 @@ export default {
 
       setTimeout(() => {
         document
-          .getElementById(
-            last ? last.id : penultimate ? penultimate.id : first.id
-          )
+          .getElementById(last ? last.id : penultimate ? penultimate.id : first.id)
           .scrollIntoView({ block: "start", behavior: "smooth" });
       }, 10);
     }
