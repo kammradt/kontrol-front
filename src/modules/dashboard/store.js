@@ -68,6 +68,7 @@ const requestMutations = {
   ADD_NEW_REQUEST_STAGE(state, payload) {
     let request = state.requests.find(request => request.id == payload.requestId)
     request.stages.push(payload.newRequestStage)
+    request.state = payload.newRequestStage.state
   },
   REPLACE_UPDATED_REQUEST(state, { updatedRequest, requestId }) {
     state.requests[state.requests.findIndex(request => request.id === requestId)] = updatedRequest;

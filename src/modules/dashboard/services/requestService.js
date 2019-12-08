@@ -43,7 +43,10 @@ export default {
       let response = await this.$http.post('/request-stages', body, { headers })
       return response.data
     } catch (error) {
-      notyf.error(error);
+      if (error.response.status === 400)
+        error.response.data.errors.forEach(e => {
+          notyf.error(e);
+        })
       throw 'ErrorCreatingNewRequestStage'
     }
   },
