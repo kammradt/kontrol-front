@@ -22,7 +22,14 @@
             <v-spacer />
             <span class="overline support--text">{{stage.realizationDate | longDate}}</span>
           </v-card-title>
-          <v-card-text v-text="stage.description" />
+          <v-card-text>
+            <v-row>
+              <v-col cols="10" v-text="stage.description" />
+              <v-col cols="2">
+                <DeleteRequestStage :requestStageId="stage.id" />
+              </v-col>
+            </v-row>
+          </v-card-text>
         </v-card>
         <v-card-actions v-if="showNewStageOption">
           <v-row>
@@ -40,16 +47,13 @@
 </template>
 
 <script>
-import NewRequestStage from "./NewRequestStage";
-import EditRequestStage from "./EditRequestStage";
-import DeleteRequest from "./DeleteRequest";
-
 export default {
   name: "Request",
   components: {
-    NewRequestStage,
-    EditRequestStage,
-    DeleteRequest
+    NewRequestStage: () => import("./NewRequestStage"),
+    EditRequestStage: () => import("./EditRequestStage"),
+    DeleteRequest: () => import("./DeleteRequest"),
+    DeleteRequestStage: () => import("./DeleteRequestStage")
   },
   data() {
     return {

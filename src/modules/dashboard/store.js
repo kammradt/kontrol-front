@@ -49,11 +49,30 @@ const requestActions = {
     commit("SET_LOADING", true)
     try {
       let updatedRequest = await requestService.updateRequest(newRequestData)
-      commit("REPLACE_UPDATED_REQUEST", { updatedRequest, requestId: newRequestData.requestId })
+      commit("REPLACE_UPDATED_REQUEST", updatedRequest)
     } finally {
       commit("SET_LOADING", false)
     }
+  },
 
+  async deleteRequest({ commit }, requestId) {
+    commit("SET_LOADING", true)
+    try {
+      await requestService.deleteRequest(requestId)
+      commit("REMOVE_REQUEST", requestId)
+    } finally {
+      commit("SET_LOADING", false)
+    }
+  },
+
+  async deleteRequestStage({commit}, requestStageId) {
+    commit("SET_LOADING", true)
+    try {
+      let updatedRequest = await requestService.deleteRequestStage(requestStageId)
+      commit("REPLACE_UPDATED_REQUEST", updatedRequest)
+    } finally {
+      commit("SET_LOADING", false)
+    }
 
   }
 }
@@ -70,8 +89,11 @@ const requestMutations = {
     request.stages.push(payload.newRequestStage)
     request.state = payload.newRequestStage.state
   },
-  REPLACE_UPDATED_REQUEST(state, { updatedRequest, requestId }) {
-    state.requests[state.requests.findIndex(request => request.id === requestId)] = updatedRequest;
+  REPLACE_UPDATED_REQUEST(state, payload) {
+    state.requests[state.requests.findIndex(request => request.id === payload.id)] = payload;
+  },
+  REMOVE_REQUEST(state, payload) {
+    state.requests = state.requests.filter(request => request.id !== payload)
   }
 }
 
