@@ -5,7 +5,15 @@
       <v-spacer />
       <span class="caption support--text">{{request.creationDate | shortDate}}</span>
     </v-card-title>
-    <v-card-text v-text="request.description" />
+    <v-card-text>
+      <v-row>
+        <v-col cols="10" v-text="request.description" />
+        <v-col cols="2" v-show="showDetails">
+          <DeleteRequest :requestId="request.id" />
+        </v-col>
+      </v-row>
+    </v-card-text>
+
     <v-slide-y-transition>
       <v-card-text v-show="showDetails">
         <v-card tile class="ma-3" v-for="stage in request.stages" :key="stage.id" :id="stage.id">
@@ -34,11 +42,14 @@
 <script>
 import NewRequestStage from "./NewRequestStage";
 import EditRequestStage from "./EditRequestStage";
+import DeleteRequest from "./DeleteRequest";
 
 export default {
   name: "Request",
   components: {
-    NewRequestStage, EditRequestStage
+    NewRequestStage,
+    EditRequestStage,
+    DeleteRequest
   },
   data() {
     return {
@@ -97,7 +108,9 @@ export default {
 
       setTimeout(() => {
         document
-          .getElementById(last ? last.id : penultimate ? penultimate.id : first.id)
+          .getElementById(
+            last ? last.id : penultimate ? penultimate.id : first.id
+          )
           .scrollIntoView({ block: "start", behavior: "smooth" });
       }, 10);
     }

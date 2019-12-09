@@ -72,6 +72,18 @@ export default {
       }
       throw 'ErrorUpdatingRequest'
     }
+  },
+
+  async deleteRequest(requestId) {
+    let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    try {
+      let response = await this.$http.delete(`/requests/${requestId}`, { headers })
+      if (response.status === 200)
+        notyf.success('Deleted!');
+    } catch (error) {
+      notyf.error(error.response.data.message)
+      throw 'NotAbleToDeleteRequest'
+    }
   }
 
 }
