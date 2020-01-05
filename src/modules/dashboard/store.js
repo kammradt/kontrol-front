@@ -110,7 +110,7 @@ const requestMutations = {
   },
   ADD_FILES_TO_REQUEST(state, payload) {
     let request = state.requests.find(request => request.id == payload.requestId)
-    request.files.push(payload.filesUploaded)
+    request.files.push(...payload.filesUploaded)
   }
 }
 
