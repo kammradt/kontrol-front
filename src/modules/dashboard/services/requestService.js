@@ -31,6 +31,18 @@ export default {
     }
   },
 
+  async addFilesToRequest({ requestId, formDataFiles }) {
+    try {
+      let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      let response = await this.$http.post(`/requests/${requestId}/files`, formDataFiles, { headers })
+      if (response.status === 201)
+        return response.data
+    } catch (error) {
+      notyf.error(error.response.data.message)
+      throw 'ErrorAddingFilesToRequest'
+    }
+  },
+
   async addRequestStage({ requestId, isClosed, description }) {
     try {
       let body = {
