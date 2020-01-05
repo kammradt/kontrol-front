@@ -31,13 +31,20 @@
             </v-row>
           </v-card-text>
         </v-card>
+        <div v-if="request.files.length > 0">
+          <small v-for="file in request.files" :key="file.id">{{file}}</small>
+        </div>
+        <div v-else>no files bro</div>
         <v-card-actions v-if="showNewStageOption">
           <v-row>
             <v-col cols="4">
               <EditRequestStage :request="request" />
             </v-col>
-            <v-col cols="8">
+            <v-col cols="5">
               <NewRequestStage :requestId="request.id" />
+            </v-col>
+            <v-col cols="3">
+              <AddFilesToRequest :requestId="request.id" />
             </v-col>
           </v-row>
         </v-card-actions>
@@ -53,7 +60,8 @@ export default {
     NewRequestStage: () => import("./NewRequestStage"),
     EditRequestStage: () => import("./EditRequestStage"),
     DeleteRequest: () => import("./DeleteRequest"),
-    DeleteRequestStage: () => import("./DeleteRequestStage")
+    DeleteRequestStage: () => import("./DeleteRequestStage"),
+    AddFilesToRequest: () => import("./AddFilesToRequest")
   },
   data() {
     return {
@@ -62,7 +70,8 @@ export default {
         OPEN: "open",
         IN_PROGRESS: "progress",
         CLOSED: "closed"
-      }
+      },
+      files: []
     };
   },
   computed: {
