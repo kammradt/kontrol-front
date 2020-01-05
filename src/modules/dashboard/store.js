@@ -32,6 +32,19 @@ const requestActions = {
     }
   },
 
+  async addFilesToRequest({ commit }, { requestId, formDataFiles }) {
+    commit("SET_LOADING", true)
+    try {
+      let filesUploaded = await requestService.addFilesToRequest({ requestId, formDataFiles })
+      commit("ADD_FILES_TO_REQUEST", {
+        requestId,
+        filesUploaded
+      })
+    } finally {
+      commit("SET_LOADING", false)
+    }
+  },
+
   async addRequestStage({ commit }, newRequestStageData) {
     commit("SET_LOADING", true)
     try {
@@ -94,6 +107,10 @@ const requestMutations = {
   },
   REMOVE_REQUEST(state, payload) {
     state.requests = state.requests.filter(request => request.id !== payload)
+  },
+  ADD_FILES_TO_REQUEST(state, payload) {
+    let request = state.requests.find(request => request.id == payload.requestId)
+    request.files.push(payload.filesUploaded)
   }
 }
 
