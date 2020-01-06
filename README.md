@@ -9,6 +9,10 @@
 
 
 You can access using this [link](http://kontrol-everything.herokuapp.com/)  
+> You can test with:  
+> User: vinicius.kammradt@email.com  
+> Pass: 12345678  
+
 (Please note that the design was made for mobile first, a better desktrop version will be made)
 
 ## Author
