@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn color="success" @click.stop="openFileUploader">
+    <v-btn color="success" @click.stop="openFileUploader" block>
       <v-icon>mdi-camera-plus</v-icon>
     </v-btn>
     <v-file-input
