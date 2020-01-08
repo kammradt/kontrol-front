@@ -20,8 +20,10 @@ export default {
       let body = { ...newRequestData, user: { id: this.$app.$store.getters.USER.id } }
       let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$http.post('/requests', body, { headers })
-      if (response.status === 201)
+      if (response.status === 201) {
+        notyf.success("Request created!")
         return response.data
+      }
     } catch (error) {
       if (error.response.status === 400)
         error.response.data.errors.forEach(e => {
@@ -35,8 +37,10 @@ export default {
     try {
       let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$http.post(`/requests/${requestId}/files`, formDataFiles, { headers })
-      if (response.status === 201)
+      if (response.status === 201) {
+        notyf.success("File uploaded!")
         return response.data
+      }
     } catch (error) {
       notyf.error(error.response.data.message)
       throw 'ErrorAddingFilesToRequest'
@@ -53,7 +57,10 @@ export default {
       }
       let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$http.post('/request-stages', body, { headers })
-      return response.data
+      if (response.status === 201) {
+        notyf.success("Stage added!")
+        return response.data
+      }
     } catch (error) {
       if (error.response.status === 400)
         error.response.data.errors.forEach(e => {
@@ -73,7 +80,10 @@ export default {
       }
       let headers = { Authorization: `Bearer ${localStorage.getItem('token')}` }
       let response = await this.$http.put(`/requests/${requestId}`, body, { headers })
-      return response.data
+      if (response.status === 200) {
+        notyf.success("Request updated!")
+        return response.data
+      }
     } catch (error) {
       if (error.response.status === 400) {
         error.response.data.errors.forEach(e => {
