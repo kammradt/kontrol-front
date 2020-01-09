@@ -114,7 +114,6 @@ export default {
       let response = await this.$http.delete(`/request-stages/${requestStageId}`, { headers })
       if (response.status === 200) {
         notyf.success('Deleted!');
-        return response.data
       }
     } catch (error) {
       notyf.error(error.response.data.message)

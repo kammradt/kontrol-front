@@ -78,11 +78,11 @@ const requestActions = {
     }
   },
 
-  async deleteRequestStage({commit}, requestStageId) {
+  async deleteRequestStage({ commit, dispatch }, requestStageId) {
     commit("SET_LOADING", true)
     try {
-      let updatedRequest = await requestService.deleteRequestStage(requestStageId)
-      commit("REPLACE_UPDATED_REQUEST", updatedRequest)
+      await requestService.deleteRequestStage(requestStageId)
+      dispatch("getRequests")
     } finally {
       commit("SET_LOADING", false)
     }
@@ -101,9 +101,6 @@ const requestMutations = {
     let request = state.requests.find(request => request.id == payload.requestId)
     request.stages.push(payload.newRequestStage)
     request.state = payload.newRequestStage.state
-  },
-  REPLACE_UPDATED_REQUEST(state, payload) {
-    state.requests[state.requests.findIndex(request => request.id === payload.id)] = payload;
   },
   REMOVE_REQUEST(state, payload) {
     state.requests = state.requests.filter(request => request.id !== payload)
