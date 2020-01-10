@@ -171,9 +171,6 @@ export default {
       this.logout();
     },
     updateUserProfile() {
-      if (this.newUserData.name === "") this.newUserData.name = this.user.name;
-      if (this.newUserData.email === "") this.newUserData.email = this.user.email;
-
       this.$store
         .dispatch("updateUserProfile", {
           ...this.newUserData
