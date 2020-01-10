@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import { showError } from './../plugins/notyf'
+import { showSuccess } from './../plugins/notyf'
 import store from './../store/index'
 
 import loginRoutes from './../modules/login/router'
@@ -25,7 +25,7 @@ router.beforeEach((to, from, next) => {
       return
     }
     next({ name: 'LoginIndex' })
-    showError('LOGIN_REQUIRED')
+    showSuccess('LOGIN_REQUIRED')
   } else if (to.meta.isLoginPage && hasToken) {
     next({ name: 'Dashboard' })
   } else {
