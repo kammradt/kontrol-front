@@ -22,6 +22,7 @@ new Vue({
   vuetify,
   beforeCreate() {
     requestService.$app = this;
+    userService.$app = this;
   },
   render: h => h(App)
 }).$mount('#app')

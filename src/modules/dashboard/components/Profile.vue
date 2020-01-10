@@ -125,7 +125,7 @@
 </template>
 
 <script>
-import notyf from "./../../../plugins/notyf";
+import { showSuccess } from "./../../../plugins/notyf";
 
 export default {
   name: "Profile",
@@ -167,7 +167,7 @@ export default {
     },
     afterChangingUserInformation() {
       this.closeDialog();
-      notyf.success("Please, login with your new information!");
+      showSuccess("LOGIN_AGAIN_REQUIRED");
       this.logout();
     },
     updateUserProfile() {
