@@ -31,7 +31,7 @@
             </v-row>
           </v-card-text>
         </v-card>
-        <RequestFiles :files="request.files" />
+        <RequestFiles :requestId="request.id" :files="request.files" />
         <v-card-actions v-if="showNewStageOption">
           <v-row>
             <v-col cols="4">
