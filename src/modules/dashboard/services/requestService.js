@@ -47,6 +47,18 @@ export default {
     }
   },
 
+  async deleteFile({ requestId, fileId }) {
+    let headers = getHeader()
+    try {
+      let response = await this.$http.delete(`/requests/${requestId}/files/${fileId}`, { headers })
+      if (response.status === 200)
+        showSuccess("FILE_DELETED")
+    } catch (error) {
+      showError(error.response.data.message)
+      throw 'ErrorDeletingFiles'
+    }
+  },
+
   async addRequestStage({ requestId, isClosed, description }) {
     let headers = getHeader()
     let body = {

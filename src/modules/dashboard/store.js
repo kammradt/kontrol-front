@@ -45,6 +45,16 @@ const requestActions = {
     }
   },
 
+  async deleteFile({ commit, dispatch }, { requestId, fileId }) {
+    commit("SET_LOADING", true)
+    try {
+      await requestService.deleteFile({ requestId, fileId })
+      dispatch("getRequests")
+    } finally {
+      commit("SET_LOADING", false)
+    }
+  },
+
   async addRequestStage({ commit }, newRequestStageData) {
     commit("SET_LOADING", true)
     try {

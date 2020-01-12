@@ -16,6 +16,7 @@ const SUCCESS_ENUM_OPTIONS = {
     REQUEST_UPDATED: 'Request updated!',
     REQUEST_DELETED: 'Request Deleted!',
     FILES_UPLOADED: 'File uploaded!',
+    FILE_DELETED: 'File deleted!',
     STAGE_ADDED: 'Stage added!',
     STAGE_DELETED: 'Stage Deleted!',
 
