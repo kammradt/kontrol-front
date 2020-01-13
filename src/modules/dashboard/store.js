@@ -113,7 +113,6 @@ const requestMutations = {
     request.state = payload.newRequestStage.state
   },
   REPLACE_UPDATED_REQUEST(state, payload) {
-    console.log(payload)
     state.requests[state.requests.findIndex(request => request.id === payload.id)] = payload;
   },
   REMOVE_REQUEST(state, payload) {
