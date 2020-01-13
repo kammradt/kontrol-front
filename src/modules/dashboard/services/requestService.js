@@ -77,6 +77,8 @@ export default {
     } catch (error) {
       if (error.response.status === 400)
         showMultipleErrors(error.response.data.errors)
+      else
+        showError(error.response.data.message)
       throw 'ErrorCreatingNewRequestStage'
     }
   },
