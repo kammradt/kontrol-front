@@ -35,7 +35,7 @@
         <v-card-actions v-if="showNewStageOption">
           <v-row>
             <v-col cols="4">
-              <EditRequestStage :request="request" />
+              <EditRequest :request="request" />
             </v-col>
             <v-col cols="5">
               <NewRequestStage :requestId="request.id" />
@@ -55,7 +55,7 @@ export default {
   name: "Request",
   components: {
     NewRequestStage: () => import("./NewRequestStage"),
-    EditRequestStage: () => import("./EditRequestStage"),
+    EditRequest: () => import("./EditRequest"),
     DeleteRequest: () => import("./DeleteRequest"),
     DeleteRequestStage: () => import("./DeleteRequestStage"),
     AddFilesToRequest: () => import("./AddFilesToRequest"),

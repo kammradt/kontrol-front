@@ -1,14 +1,14 @@
 <template>
   <div>
     <v-btn
-      @click.stop="dialogEditRequestStage = true"
+      @click.stop="dialogEditRequest = true"
       dark
       block
       depressed
       color="progress"
       v-text="'Edit'"
     />
-    <v-dialog v-model="dialogEditRequestStage" max-width="600px">
+    <v-dialog v-model="dialogEditRequest" max-width="600px">
       <v-card>
         <v-card-title>
           <span class="primary--text headline pb-5">Updating a Request</span>
@@ -43,13 +43,13 @@
 
 <script>
 export default {
-  name: "EditRequestStage",
+  name: "EditRequest",
   props: {
     request: Object
   },
   data() {
     return {
-      dialogEditRequestStage: false,
+      dialogEditRequest: false,
       newRequestData: {
         subject: this.request.subject,
         description: this.request.description,
@@ -69,7 +69,7 @@ export default {
         });
     },
     closeDialog() {
-      this.dialogEditRequestStage = false;
+      this.dialogEditRequest = false;
       this.newRequestData = {};
     }
   }
