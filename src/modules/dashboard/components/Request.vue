@@ -91,11 +91,11 @@ export default {
   filters: {
     shortDate: date => {
       let d = new Date(date);
-      return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()}`;
+      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
     },
     longDate: date => {
       let d = new Date(date);
-      return `${d.getMonth()}/${d.getDay()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     },
     formattedState(state) {
       let formatted = {
