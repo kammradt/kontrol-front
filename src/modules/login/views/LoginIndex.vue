@@ -25,6 +25,8 @@
               <v-text-field
                 v-model="loginForm.name"
                 v-show="!isTryingToLogin"
+                :rules="!isTryingToLogin ? nameRules : []"
+                error-count="2"
                 label="Name"
                 type="text"
                 prepend-icon="mdi-account-circle"
@@ -65,7 +67,11 @@
 
 <script>
 import { mapActions } from "vuex";
-import { passwordRules, emailRules } from "./../../util/vuetifyRules";
+import {
+  passwordRules,
+  emailRules,
+  nameRules
+} from "./../../util/vuetifyRules";
 
 export default {
   name: "LoginIndex",
@@ -78,7 +84,8 @@ export default {
     isTryingToLogin: true,
     isValid: false,
     passwordRules,
-    emailRules
+    emailRules,
+    nameRules
   }),
   computed: {
     color() {
