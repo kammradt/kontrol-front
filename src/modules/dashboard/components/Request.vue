@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import { shortDate, longDate } from "./../../util/dateFormatterFilters";
+
 export default {
   name: "Request",
   props: {
@@ -89,14 +91,8 @@ export default {
     }
   },
   filters: {
-    shortDate: date => {
-      let d = new Date(date);
-      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-    },
-    longDate: date => {
-      let d = new Date(date);
-      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-    },
+    shortDate: date => shortDate(date),
+    longDate: date => longDate(date),
     formattedState(state) {
       let formatted = {
         OPEN: "Open",
