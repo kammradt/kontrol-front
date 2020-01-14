@@ -52,6 +52,7 @@
 
 <script>
 import { shortDate, longDate } from "./../../util/dateFormatterFilters";
+import { scrollToById } from "./../../util/screenBehaviorService";
 
 export default {
   name: "Request",
@@ -107,19 +108,11 @@ export default {
       this.showDetails = !this.showDetails;
       if (this.request.stages.length === 0) return;
 
-      let last = this.request.stages.find(stage => stage.state === `CLOSED`);
-      let penultimate = this.request.stages.find(
-        stage => stage.state === `IN_PROGRESS`
+      let lastStage = this.request.stages.find(
+        stage => stage.state === this.request.state
       );
-      let first = this.request.stages.find(stage => stage.state === `OPEN`);
 
-      setTimeout(() => {
-        document
-          .getElementById(
-            last ? last.id : penultimate ? penultimate.id : first.id
-          )
-          .scrollIntoView({ block: "start", behavior: "smooth" });
-      }, 10);
+      scrollToById(lastStage.id);
     }
   }
 };
