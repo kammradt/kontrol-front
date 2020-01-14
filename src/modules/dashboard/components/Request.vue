@@ -53,13 +53,16 @@
 <script>
 export default {
   name: "Request",
+  props: {
+    request: Object
+  },
   components: {
     NewRequestStage: () => import("./NewRequestStage"),
     EditRequest: () => import("./EditRequest"),
     DeleteRequest: () => import("./DeleteRequest"),
     DeleteRequestStage: () => import("./DeleteRequestStage"),
     AddFilesToRequest: () => import("./AddFilesToRequest"),
-    RequestFiles: () => import("./RequestFiles"),
+    RequestFiles: () => import("./RequestFiles")
   },
   data() {
     return {
@@ -78,15 +81,12 @@ export default {
     },
     borderStyle() {
       let colorByState = {
-        OPEN: "#C3E88D",
-        IN_PROGRESS: "#FFCB6B",
-        CLOSED: "#D5756C"
+        OPEN: this.$vuetify.theme.themes.light.open,
+        IN_PROGRESS: this.$vuetify.theme.themes.light.progress,
+        CLOSED: this.$vuetify.theme.themes.light.closed
       };
       return `border-left: 4px solid ${colorByState[this.request.state]}`;
     }
-  },
-  props: {
-    request: Object
   },
   filters: {
     shortDate: date => {
