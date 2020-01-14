@@ -25,7 +25,7 @@ const nameRules = [
   v => lengthBiggerThan(v, 'Name', 5)
 ]
 
-const subjectRules = [
+const requestSubjectRules = [
   v => required(v, 'Subject'),
   v => lengthBiggerThan(v, 'Subject', 5)
 ]
@@ -34,5 +34,5 @@ export {
   passwordRules,
   emailRules,
   nameRules,
-  subjectRules
+  requestSubjectRules
 }
