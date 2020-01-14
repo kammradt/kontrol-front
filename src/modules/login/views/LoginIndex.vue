@@ -21,7 +21,7 @@
             <v-spacer />
           </v-toolbar>
           <v-card-text>
-            <v-form>
+            <v-form v-model="isValid">
               <v-text-field
                 v-model="loginForm.name"
                 v-show="!isTryingToLogin"
@@ -31,6 +31,8 @@
               />
               <v-text-field
                 v-model="loginForm.email"
+                :rules="emailRules"
+                error-count="2"
                 label="Email"
                 type="text"
                 prepend-icon="mdi-account-circle"
@@ -38,6 +40,7 @@
               <v-text-field
                 v-model="loginForm.password"
                 :rules="passwordRules"
+                error-count="2"
                 label="Password"
                 type="password"
                 prepend-icon="mdi-lock"
@@ -47,10 +50,10 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              @click="isTryingToLogin ? login() : register() "
+              @click="isTryingToLogin ? login() : register()"
               :color="color"
               :loading="loading"
-              :disabled="loading"
+              :disabled="loading || !isValid"
               block
             >{{isTryingToLogin ? 'Login' : 'Register'}}</v-btn>
           </v-card-actions>
@@ -62,6 +65,7 @@
 
 <script>
 import { mapActions } from "vuex";
+import { passwordRules, emailRules } from "./../../util/vuetifyRules";
 
 export default {
   name: "LoginIndex",
@@ -71,7 +75,10 @@ export default {
       email: "",
       password: ""
     },
-    isTryingToLogin: true
+    isTryingToLogin: true,
+    isValid: false,
+    passwordRules,
+    emailRules
   }),
   computed: {
     color() {
