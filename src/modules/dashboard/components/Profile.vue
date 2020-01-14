@@ -6,7 +6,7 @@
           <v-icon v-text="'mdi-dots-vertical'" />
         </v-btn>
       </template>
-      <v-btn fab dark color="primary" @click="openProfile">
+      <v-btn fab dark color="primary" @click="dialogProfile = true">
         <v-icon>mdi-account</v-icon>
       </v-btn>
       <v-btn fab dark color="closed" @click="logout">
@@ -126,6 +126,7 @@
 
 <script>
 import { showSuccess } from "./../../../plugins/notyf";
+import { mapActions } from "vuex";
 
 export default {
   name: "Profile",
@@ -152,39 +153,38 @@ export default {
     }
   },
   methods: {
-    openProfile() {
-      this.dialogProfile = true;
+    ...mapActions(["logout", "updateUserProfile", "updateUserPassword"]),
+    ...mapActions({
+      _logout: "logout",
+      _updateUserProfile: "updateUserProfile",
+      _updateUserPassword: "updateUserPassword"
+    }),
+    updateUserProfile() {
+      this._updateUserProfile({ ...this.newUserData }).then(
+        this.afterChangingUserInformation
+      );
     },
-    logout() {
-      this.$store.dispatch("logout").then(() => {
-        this.$router.push({ name: "LoginIndex" });
-      });
-    },
-    closeDialog() {
-      this.dialogProfile = false;
-      this.changingPassword = false;
-      this.newUserData = {};
+    updateUserPassword() {
+      this._updateUserPassword({
+        ...this.newUserPasswordData
+      }).then(this.afterChangingUserInformation);
     },
     afterChangingUserInformation() {
       this.closeDialog();
       showSuccess("LOGIN_AGAIN_REQUIRED");
       this.logout();
     },
-    updateUserProfile() {
-      this.$store
-        .dispatch("updateUserProfile", {
-          ...this.newUserData
-        })
-        .then(() => {
-          this.afterChangingUserInformation();
-        });
+    closeDialog() {
+      this.dialogProfile = false;
+      this.changingPassword = false;
+      this.newUserData = {};
+      this.newUserPasswordData = {}
     },
-    updateUserPassword() {
-      this.$store
-        .dispatch("updateUserPassword", { ...this.newUserPasswordData })
-        .then(() => {
-          this.afterChangingUserInformation();
-        });
+    logout() {
+      this._logout().then(this.goToLoginIndex);
+    },
+    goToLoginIndex() {
+      this.$router.push({ name: "LoginIndex" });
     }
   }
 };
