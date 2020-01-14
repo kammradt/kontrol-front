@@ -37,7 +37,8 @@
               />
               <v-text-field
                 v-model="loginForm.password"
-                label="Senha"
+                :rules="passwordRules"
+                label="Password"
                 type="password"
                 prepend-icon="mdi-lock"
               />
