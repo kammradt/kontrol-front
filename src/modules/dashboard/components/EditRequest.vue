@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "EditRequest",
   props: {
@@ -58,15 +59,15 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["updateRequest"]),
+    ...mapActions({
+      _updateRequest: "updateRequest"
+    }),
     updateRequest() {
-      this.$store
-        .dispatch("updateRequest", {
-          requestId: this.request.id,
-          ...this.newRequestData
-        })
-        .then(() => {
-          this.closeDialog();
-        });
+      this._updateRequest({
+        requestId: this.request.id,
+        ...this.newRequestData
+      }).then(this.closeDialog);
     },
     closeDialog() {
       this.dialogEditRequest = false;

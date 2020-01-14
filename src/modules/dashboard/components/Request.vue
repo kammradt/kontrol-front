@@ -51,15 +51,21 @@
 </template>
 
 <script>
+import { shortDate, longDate } from "./../../util/dateFormatterFilters";
+import { scrollToById } from "./../../util/screenBehaviorService";
+
 export default {
   name: "Request",
+  props: {
+    request: Object
+  },
   components: {
     NewRequestStage: () => import("./NewRequestStage"),
     EditRequest: () => import("./EditRequest"),
     DeleteRequest: () => import("./DeleteRequest"),
     DeleteRequestStage: () => import("./DeleteRequestStage"),
     AddFilesToRequest: () => import("./AddFilesToRequest"),
-    RequestFiles: () => import("./RequestFiles"),
+    RequestFiles: () => import("./RequestFiles")
   },
   data() {
     return {
@@ -78,25 +84,16 @@ export default {
     },
     borderStyle() {
       let colorByState = {
-        OPEN: "#C3E88D",
-        IN_PROGRESS: "#FFCB6B",
-        CLOSED: "#D5756C"
+        OPEN: this.$vuetify.theme.themes.light.open,
+        IN_PROGRESS: this.$vuetify.theme.themes.light.progress,
+        CLOSED: this.$vuetify.theme.themes.light.closed
       };
       return `border-left: 4px solid ${colorByState[this.request.state]}`;
     }
   },
-  props: {
-    request: Object
-  },
   filters: {
-    shortDate: date => {
-      let d = new Date(date);
-      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()}`;
-    },
-    longDate: date => {
-      let d = new Date(date);
-      return `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-    },
+    shortDate: date => shortDate(date),
+    longDate: date => longDate(date),
     formattedState(state) {
       let formatted = {
         OPEN: "Open",
@@ -111,19 +108,11 @@ export default {
       this.showDetails = !this.showDetails;
       if (this.request.stages.length === 0) return;
 
-      let last = this.request.stages.find(stage => stage.state === `CLOSED`);
-      let penultimate = this.request.stages.find(
-        stage => stage.state === `IN_PROGRESS`
+      let lastStage = this.request.stages.find(
+        stage => stage.state === this.request.state
       );
-      let first = this.request.stages.find(stage => stage.state === `OPEN`);
 
-      setTimeout(() => {
-        document
-          .getElementById(
-            last ? last.id : penultimate ? penultimate.id : first.id
-          )
-          .scrollIntoView({ block: "start", behavior: "smooth" });
-      }, 10);
+      scrollToById(lastStage.id);
     }
   }
 };

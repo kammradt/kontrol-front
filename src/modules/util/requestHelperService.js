@@ -1,9 +1,9 @@
 function getHeader() {
-    return {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-    }
+  return {
+    Authorization: `Bearer ${localStorage.getItem('token')}`
+  }
 }
 
 export {
-    getHeader
+  getHeader
 }

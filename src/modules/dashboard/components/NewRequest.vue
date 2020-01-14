@@ -36,6 +36,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "NewRequest",
   data: () => ({
@@ -46,14 +47,13 @@ export default {
     }
   }),
   methods: {
+    ...mapActions(["createRequest"]),
+    createNewRequest() {
+      this.createRequest(this.newRequestData).then(this.closeDialog);
+    },
     closeDialog() {
       this.newRequestDialog = false;
       this.newRequestData = {};
-    },
-    createNewRequest() {
-      this.$store.dispatch("createRequest", this.newRequestData).then(() => {
-        this.closeDialog();
-      });
     }
   }
 };

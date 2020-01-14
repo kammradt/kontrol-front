@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   name: "NewRequestStage",
   props: {
@@ -58,16 +59,13 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addRequestStage"]),
+    createNewRequestStage() {
+      this.addRequestStage(this.newRequestStageData).then(this.closeDialog);
+    },
     closeDialog() {
       this.newRequestStageDialog = false;
       this.newRequestStageData = {};
-    },
-    createNewRequestStage() {
-      this.$store
-        .dispatch("addRequestStage", this.newRequestStageData)
-        .then(() => {
-          this.closeDialog();
-        });
     }
   }
 };

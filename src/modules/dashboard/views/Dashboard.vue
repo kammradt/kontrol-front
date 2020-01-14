@@ -23,6 +23,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "Dashboard",
   components: {
@@ -45,9 +47,12 @@ export default {
       );
     }
   },
+  methods: {
+    ...mapActions(["me", "getRequests"])
+  },
   mounted() {
-    this.$store.dispatch("me").then(() => {
-      this.$store.dispatch("getRequests");
+    this.me().then(() => {
+      this.getRequests();
     });
   }
 };

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   props: {
     requestId: Number
@@ -26,13 +27,14 @@ export default {
     };
   },
   methods: {
+    ...mapActions(["addFilesToRequest"]),
     openFileUploader() {
       document.getElementById(`uploadFiles-${this.requestId}`).click();
     },
     sendFiles() {
       const formDataFiles = new FormData();
       for (let file of this.files) formDataFiles.append("files", file);
-      this.$store.dispatch("addFilesToRequest", {
+      this.addFilesToRequest({
         requestId: this.requestId,
         formDataFiles
       });
