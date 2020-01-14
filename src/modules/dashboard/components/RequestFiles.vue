@@ -6,7 +6,7 @@
           <v-btn @click.stop="downloadFile(file.id)" color="primary" block outlined>{{file.name}}</v-btn>
         </v-col>
         <v-col cols="2">
-          <v-btn icon color="closed" @click.stop="deletefile(file.id)">
+          <v-btn icon color="closed" @click.stop="deleteFile({requestId, fileId: file.id})">
             <v-icon>mdi-delete-empty</v-icon>
           </v-btn>
           <a
@@ -26,20 +26,18 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
+  name: "RequestFiles",
   props: {
     files: Array,
     requestId: Number
   },
   methods: {
+    ...mapActions(["deleteFile"]),
     downloadFile(fileId) {
       document.getElementById(`fileToDownload-${fileId}`).click();
-    },
-    deletefile(fileId) {
-      this.$store.dispatch("deleteFile", {
-        requestId: this.requestId,
-        fileId
-      });
     }
   }
 };
