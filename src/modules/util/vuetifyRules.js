@@ -3,7 +3,7 @@ function required(v, fieldName) {
 }
 
 function lengthBiggerThan(v, fieldName, len) {
-  return (v && v.length >= 8) || `${fieldName} must have ${len}+ characters`;
+  return (v && v.length >= len) || `${fieldName} must have ${len}+ characters`;
 }
 
 function email(v) {
