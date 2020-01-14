@@ -60,6 +60,8 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 export default {
   name: "LoginIndex",
   data: () => ({
@@ -79,16 +81,21 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["login", "register"]),
+    ...mapActions({
+      _login: "login",
+      _register: "register"
+    }),
     changeForm() {
       this.isTryingToLogin = !this.isTryingToLogin;
     },
     login() {
-      this.$store.dispatch("login", this.loginForm).then(() => {
-        this.$router.push({ name: `Dashboard` });
+      this._login(this.loginForm).then(() => {
+        this.$router.push({ name: 'Dashboard' });
       });
     },
     register() {
-      this.$store.dispatch("register", this.loginForm).then(() => {
+      this._register(this.loginForm).then(() => {
         this.isTryingToLogin = !this.isTryingToLogin;
       });
     }
