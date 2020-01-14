@@ -20,8 +20,8 @@
                 <v-col cols="12">
                   <v-text-field
                     v-model="newRequestData.subject"
-                    :rules="requestUpdateRules"
-                    :error-count="requestUpdateRules.length"
+                    :rules="subjectRules"
+                    :error-count="subjectRules.length"
                     outlined
                     label="Subject"
                   />
@@ -53,7 +53,7 @@
 
 <script>
 import { mapActions } from "vuex";
-import { requestUpdateRules } from "./../../util/vuetifyRules";
+import { subjectRules } from "./../../util/vuetifyRules";
 export default {
   name: "EditRequest",
   props: {
@@ -68,7 +68,7 @@ export default {
         isClosed: false
       },
       isValid: false,
-      requestUpdateRules
+      subjectRules
     };
   },
   methods: {
