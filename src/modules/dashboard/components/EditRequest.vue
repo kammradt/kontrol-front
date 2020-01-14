@@ -27,7 +27,13 @@
                   />
                 </v-col>
                 <v-col cols="12">
-                  <v-text-field v-model="newRequestData.description" outlined label="Description" />
+                  <v-text-field
+                    v-model="newRequestData.description"
+                    :rules="requestDescriptionRules"
+                    :error-count="requestDescriptionRules.length"
+                    outlined
+                    label="Description"
+                  />
                 </v-col>
                 <v-col cols="12">
                   <v-switch label="Is finished?" v-model="newRequestData.isClosed"></v-switch>
@@ -53,7 +59,11 @@
 
 <script>
 import { mapActions } from "vuex";
-import { requestSubjectRules } from "./../../util/vuetifyRules";
+import {
+  requestSubjectRules,
+  requestDescriptionRules
+} from "./../../util/vuetifyRules";
+
 export default {
   name: "EditRequest",
   props: {
@@ -68,7 +78,8 @@ export default {
         isClosed: false
       },
       isValid: false,
-      requestSubjectRules
+      requestSubjectRules,
+      requestDescriptionRules
     };
   },
   methods: {
