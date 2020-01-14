@@ -12,22 +12,38 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.subject" outlined label="Subject" />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.description" outlined label="Description" />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="6">
-                <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
-              </v-col>
-              <v-col cols="6">
-                <v-btn color="open" dark block @click="createNewRequest">Save</v-btn>
-              </v-col>
-            </v-row>
+            <v-form v-model="isValid">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newRequestData.subject"
+                    :rules="requestSubjectRules"
+                    :error-count="requestSubjectRules.length"
+                    outlined
+                    label="Subject"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newRequestData.description"
+                    :rules="requestDescriptionRules"
+                    :error-count="requestDescriptionRules.length"
+                    outlined
+                    label="Description"
+                  />
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col cols="6">
+                  <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
+                </v-col>
+                <v-col cols="6">
+                  <v-btn color="open" block :disabled="!isValid" @click="createNewRequest">
+                    <span class="white--text" v-text="'Save'" />
+                  </v-btn>
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
         </v-card-text>
       </v-card>
@@ -37,6 +53,11 @@
 
 <script>
 import { mapActions } from "vuex";
+import {
+  requestSubjectRules,
+  requestDescriptionRules
+} from "./../../util/vuetifyRules";
+
 export default {
   name: "NewRequest",
   data: () => ({
@@ -44,7 +65,10 @@ export default {
     newRequestData: {
       subject: "",
       description: ""
-    }
+    },
+    isValid: false,
+    requestSubjectRules,
+    requestDescriptionRules
   }),
   methods: {
     ...mapActions(["createRequest"]),

@@ -24,54 +24,65 @@
         </v-card-title>
         <v-card-text v-if="!changingPassword">
           <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="newUserData.name"
-                  :placeholder="user.name"
-                  outlined
-                  label="Name"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="newUserData.email"
-                  :placeholder="user.email"
-                  outlined
-                  label="Email"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="user.role" readonly outlined label="Premium Status" />
-              </v-col>
-            </v-row>
+            <v-form v-model="isProfileValid" ref="profileForm">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newUserData.name"
+                    :placeholder="user.name"
+                    :rules="nameRules"
+                    :error-count="nameRules.length"
+                    outlined
+                    label="Name"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newUserData.email"
+                    :placeholder="user.email"
+                    :rules="emailRules"
+                    :error-count="emailRules.length"
+                    outlined
+                    label="Email"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field v-model="user.role" readonly outlined label="Premium Status" />
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
         </v-card-text>
         <v-card-text v-else>
           <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  label="New password"
-                  v-model="newUserPasswordData.password"
-                  :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword = !showPassword"
-                  :type="showPassword ? 'text' : 'password'"
-                  hint="At least 8 characters"
-                />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  label="Confirm your new password"
-                  v-model="newUserPasswordData.confirmationPassword"
-                  :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
-                  @click:append="showPassword2 = !showPassword2"
-                  :type="showPassword2 ? 'text' : 'password'"
-                />
-              </v-col>
-            </v-row>
+            <v-form v-model="arePasswordsValid" ref="passwordsForm">
+              <v-row>
+                <v-col cols="12">
+                  <v-text-field
+                    outlined
+                    label="New password"
+                    v-model="newUserPasswordData.password"
+                    :rules="passwordRules"
+                    :error-count="passwordRules.length"
+                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword = !showPassword"
+                    :type="showPassword ? 'text' : 'password'"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    outlined
+                    label="Confirm your new password"
+                    v-model="newUserPasswordData.confirmationPassword"
+                    :rules="passwordRules"
+                    :error-count="passwordRules.length"
+                    :append-icon="showPassword2 ? 'mdi-eye' : 'mdi-eye-off'"
+                    @click:append="showPassword2 = !showPassword2"
+                    :type="showPassword2 ? 'text' : 'password'"
+                  />
+                </v-col>
+              </v-row>
+            </v-form>
           </v-container>
         </v-card-text>
         <v-card-text>
@@ -83,38 +94,30 @@
               <v-btn
                 color="primary"
                 v-if="!changingPassword"
-                dark
                 block
                 @click="updateUserProfile"
-                v-text="'Save profile'"
-              />
+                :disabled="!isProfileValid"
+              >
+                <span class="white--text" v-text="'Save profile'" />
+              </v-btn>
               <v-btn
                 color="secondary"
                 v-else
-                dark
                 block
                 @click="updateUserPassword"
-                v-text="'Update Password'"
-              />
+                :disabled="!arePasswordsValid"
+              >
+                <span class="white--text" v-text="'Update Password'" />
+              </v-btn>
             </v-col>
             <v-col cols="12">
               <v-btn
                 color="support"
-                v-if="!changingPassword"
                 small
                 dark
                 block
-                @click="changingPassword = true"
-                v-text="'I want to change password'"
-              />
-              <v-btn
-                color="support"
-                v-else
-                small
-                dark
-                block
-                @click="changingPassword = false"
-                v-text="'I want to change my profile'"
+                @click="resetFormValidation"
+                v-text="changingPassword ? 'I want to change my profile' : ' I want to change password'"
               />
             </v-col>
           </v-row>
@@ -127,6 +130,11 @@
 <script>
 import { showSuccess } from "./../../../plugins/notyf";
 import { mapActions } from "vuex";
+import {
+  nameRules,
+  emailRules,
+  passwordRules
+} from "./../../util/vuetifyRules";
 
 export default {
   name: "Profile",
@@ -143,7 +151,12 @@ export default {
       },
       changingPassword: false,
       showPassword: false,
-      showPassword2: false
+      showPassword2: false,
+      isProfileValid: false,
+      arePasswordsValid: false,
+      nameRules,
+      emailRules,
+      passwordRules
     };
   },
   computed: {
@@ -174,11 +187,17 @@ export default {
       showSuccess("LOGIN_AGAIN_REQUIRED");
       this.logout();
     },
+    resetFormValidation() {
+      this.changingPassword
+        ? this.$refs.passwordsForm.resetValidation()
+        : this.$refs.profileForm.resetValidation();
+      this.changingPassword = !this.changingPassword;
+    },
     closeDialog() {
       this.dialogProfile = false;
       this.changingPassword = false;
       this.newUserData = {};
-      this.newUserPasswordData = {}
+      this.newUserPasswordData = {};
     },
     logout() {
       this._logout().then(this.goToLoginIndex);

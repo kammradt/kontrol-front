@@ -21,23 +21,29 @@
             <v-spacer />
           </v-toolbar>
           <v-card-text>
-            <v-form>
+            <v-form v-model="isValid">
               <v-text-field
                 v-model="loginForm.name"
                 v-show="!isTryingToLogin"
+                :rules="!isTryingToLogin ? nameRules : []"
+                :error-count="nameRules.length"
                 label="Name"
                 type="text"
                 prepend-icon="mdi-account-circle"
               />
               <v-text-field
                 v-model="loginForm.email"
+                :rules="emailRules"
+                :error-count="emailRules.length"
                 label="Email"
                 type="text"
                 prepend-icon="mdi-account-circle"
               />
               <v-text-field
                 v-model="loginForm.password"
-                label="Senha"
+                :rules="passwordRules"
+                :error-count="passwordRules.length"
+                label="Password"
                 type="password"
                 prepend-icon="mdi-lock"
               />
@@ -46,10 +52,10 @@
           <v-card-actions>
             <v-spacer />
             <v-btn
-              @click="isTryingToLogin ? login() : register() "
+              @click="isTryingToLogin ? login() : register()"
               :color="color"
               :loading="loading"
-              :disabled="loading"
+              :disabled="loading || !isValid"
               block
             >{{isTryingToLogin ? 'Login' : 'Register'}}</v-btn>
           </v-card-actions>
@@ -61,6 +67,11 @@
 
 <script>
 import { mapActions } from "vuex";
+import {
+  passwordRules,
+  emailRules,
+  nameRules
+} from "./../../util/vuetifyRules";
 
 export default {
   name: "LoginIndex",
@@ -70,7 +81,11 @@ export default {
       email: "",
       password: ""
     },
-    isTryingToLogin: true
+    isTryingToLogin: true,
+    isValid: false,
+    passwordRules,
+    emailRules,
+    nameRules
   }),
   computed: {
     color() {
@@ -90,9 +105,10 @@ export default {
       this.isTryingToLogin = !this.isTryingToLogin;
     },
     login() {
-      this._login(this.loginForm).then(() => {
-        this.$router.push({ name: 'Dashboard' });
-      });
+      this._login(this.loginForm).then(this.goToLoginIndex);
+    },
+    goToLoginIndex() {
+      this.$router.push({ name: "Dashboard" });
     },
     register() {
       this._register(this.loginForm).then(() => {

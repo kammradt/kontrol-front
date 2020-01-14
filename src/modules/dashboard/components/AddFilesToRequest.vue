@@ -8,7 +8,6 @@
       @click.stop
       @change="sendFiles"
       :id="`uploadFiles-${requestId}`"
-      small-chips
       multiple
       v-model="files"
     />

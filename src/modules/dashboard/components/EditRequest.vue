@@ -15,23 +15,39 @@
         </v-card-title>
         <v-card-text>
           <v-container>
-            <v-row no-gutters>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.subject" outlined label="Subject" />
-              </v-col>
-              <v-col cols="12">
-                <v-text-field v-model="newRequestData.description" outlined label="Description" />
-              </v-col>
-              <v-col cols="12">
-                <v-switch label="Is finished?" v-model="newRequestData.isClosed"></v-switch>
-              </v-col>
-            </v-row>
+            <v-form v-model="isValid">
+              <v-row no-gutters>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newRequestData.subject"
+                    :rules="requestSubjectRules"
+                    :error-count="requestSubjectRules.length"
+                    outlined
+                    label="Subject"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-text-field
+                    v-model="newRequestData.description"
+                    :rules="requestDescriptionRules"
+                    :error-count="requestDescriptionRules.length"
+                    outlined
+                    label="Description"
+                  />
+                </v-col>
+                <v-col cols="12">
+                  <v-switch label="Is finished?" v-model="newRequestData.isClosed"></v-switch>
+                </v-col>
+              </v-row>
+            </v-form>
             <v-row>
               <v-col cols="6">
                 <v-btn color="closed" dark block @click="closeDialog">Close</v-btn>
               </v-col>
               <v-col cols="6">
-                <v-btn color="open" dark block @click="updateRequest">Save</v-btn>
+                <v-btn color="open" block :disabled="!isValid" @click="updateRequest">
+                  <span class="white--text" v-text="'Save'" />
+                </v-btn>
               </v-col>
             </v-row>
           </v-container>
@@ -43,6 +59,11 @@
 
 <script>
 import { mapActions } from "vuex";
+import {
+  requestSubjectRules,
+  requestDescriptionRules
+} from "./../../util/vuetifyRules";
+
 export default {
   name: "EditRequest",
   props: {
@@ -55,7 +76,10 @@ export default {
         subject: this.request.subject,
         description: this.request.description,
         isClosed: false
-      }
+      },
+      isValid: false,
+      requestSubjectRules,
+      requestDescriptionRules
     };
   },
   methods: {
