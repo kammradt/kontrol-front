@@ -108,7 +108,7 @@ export default {
       this._login(this.loginForm).then(this.goToLoginIndex);
     },
     goToLoginIndex() {
-      this.$router.push({ name: "LoginIndex" });
+      this.$router.push({ name: "Dashboard" });
     },
     register() {
       this._register(this.loginForm).then(() => {
