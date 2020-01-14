@@ -91,9 +91,10 @@ export default {
       this.isTryingToLogin = !this.isTryingToLogin;
     },
     login() {
-      this._login(this.loginForm).then(() => {
-        this.$router.push({ name: 'Dashboard' });
-      });
+      this._login(this.loginForm).then(this.goToLoginIndex);
+    },
+    goToLoginIndex() {
+      this.$router.push({ name: "LoginIndex" });
     },
     register() {
       this._register(this.loginForm).then(() => {
