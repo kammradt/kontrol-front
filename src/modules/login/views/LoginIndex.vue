@@ -26,7 +26,7 @@
                 v-model="loginForm.name"
                 v-show="!isTryingToLogin"
                 :rules="!isTryingToLogin ? nameRules : []"
-                error-count="2"
+                :error-count="nameRules.length"
                 label="Name"
                 type="text"
                 prepend-icon="mdi-account-circle"
@@ -34,7 +34,7 @@
               <v-text-field
                 v-model="loginForm.email"
                 :rules="emailRules"
-                error-count="2"
+                :error-count="emailRules.length"
                 label="Email"
                 type="text"
                 prepend-icon="mdi-account-circle"
@@ -42,7 +42,7 @@
               <v-text-field
                 v-model="loginForm.password"
                 :rules="passwordRules"
-                error-count="2"
+                :error-count="passwordRules.length"
                 label="Password"
                 type="password"
                 prepend-icon="mdi-lock"
