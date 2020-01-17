@@ -1,5 +1,5 @@
 <template>
-  <v-card @click="showRequestStages" :ripple="false" shaped :style="borderStyle">
+  <v-card @click="showRequestStages" :ripple="false" :style="borderStyle">
     <v-card-title>
       <span primary-title class="primary--text" v-text="request.subject" />
       <v-spacer />
@@ -16,7 +16,7 @@
 
     <v-slide-y-transition>
       <v-card-text v-show="showDetails">
-        <v-card tile class="ma-3" v-for="stage in request.stages" :key="stage.id" :id="stage.id">
+        <v-card tile class="ma-3" v-for="stage in request.stages" :key="stage.id" :id="stage.id" outlined>
           <v-card-title :class="`${colors[stage.state]}--text`" primary-title>
             {{stage.state | formattedState}}
             <v-spacer />
