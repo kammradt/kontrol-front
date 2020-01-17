@@ -5,7 +5,7 @@
         <v-card>
           <v-card-title>
             <v-btn text right icon color="primary">
-              <v-icon large primary left pr-3 v-text="'mdi-magnify'" />
+              <v-icon @click="enableRandomBackgroundColor = !enableRandomBackgroundColor" large primary left pr-3 v-text="'mdi-magnify'" />
             </v-btn>
             <v-text-field label="Search your request here" class="title pr-3" v-model="filterText" />
             <Profile />
@@ -43,7 +43,8 @@ export default {
     NewRequest: () => import("./../components/NewRequest")
   },
   data: () => ({
-    filterText: ""
+    filterText: "",
+    enableRandomBackgroundColor: false
   }),
   computed: {
     requests() {
@@ -55,10 +56,20 @@ export default {
       return this.requests.filter(request =>
         request.subject.toLowerCase().includes(this.filterText.toLowerCase())
       );
+    },
+    gradientBackground() {
+      if (this.enableRandomBackgroundColor)
+        return `background-image: linear-gradient(to top, ${this.randomHEX()} 0%, ${this.randomHEX()} 100%)`;
+      return ``
     }
   },
   methods: {
-    ...mapActions(["me", "getRequests"])
+    ...mapActions(["me", "getRequests"]),
+    randomHEX() {
+      return `#${Math.random()
+        .toString(16)
+        .slice(2, 8)}`;
+    }
   },
   mounted() {
     this.me().then(() => {
