@@ -5,11 +5,20 @@
         <v-card>
           <v-card-title>
             <v-btn text right icon color="primary">
-              <v-icon @click="enableRandomBackgroundColor = !enableRandomBackgroundColor" large primary left pr-3 v-text="'mdi-magnify'" />
+              <v-icon
+                @click="enableRandomBackgroundColor = !enableRandomBackgroundColor"
+                large
+                primary
+                left
+                pr-3
+                v-text="'mdi-magnify'"
+              />
             </v-btn>
             <v-text-field label="Search your request here" class="title pr-3" v-model="filterText" />
             <Profile />
           </v-card-title>
+          <v-progress-linear v-show="isLoading" height="20" indeterminate />
+
         </v-card>
       </v-col>
 
@@ -26,7 +35,6 @@
           <Request :request="request" />
         </v-col>
       </v-row>
-
       <NewRequest />
     </v-row>
   </v-container>
@@ -57,10 +65,13 @@ export default {
         request.subject.toLowerCase().includes(this.filterText.toLowerCase())
       );
     },
+    isLoading() {
+      return this.$store.getters.IS_LOADING;
+    },
     gradientBackground() {
       if (this.enableRandomBackgroundColor)
         return `background-image: linear-gradient(to top, ${this.randomHEX()} 0%, ${this.randomHEX()} 100%)`;
-      return ``
+      return ``;
     }
   },
   methods: {
