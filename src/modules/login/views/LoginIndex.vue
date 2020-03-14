@@ -78,8 +78,8 @@ export default {
   data: () => ({
     loginForm: {
       name: "",
-      email: "",
-      password: ""
+      email: "vinicius.kammradt@email.com",
+      password: "12345678"
     },
     isTryingToLogin: true,
     isValid: false,
