@@ -6,7 +6,7 @@
 </p>
 
 > This is the front end for my [Kontrol api](https://github.com/kammradt/kontrol-api)
-
+> I needed to turn off the server due costs :( 
 
 You can access using this [link](http://kontrol-everything.herokuapp.com/)  
 > You can test with:  
